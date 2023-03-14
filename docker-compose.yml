@@ -1,7 +1,7 @@
 version: '3'
 services:
-  postgresql:
-    container_name: postgresql
+  database:
+    container_name: database-ci-test
     image: postgres:14.3
     ports:
       - 5432:5432
