@@ -1,0 +1,60 @@
+# See https://docs.rubocop.org/rubocop/configuration
+
+require:
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-performance
+
+AllCops:
+  Exclude:
+    - './bin/**/*'
+    - './spec/rails_helper.rb'
+  NewCops: enable
+
+Layout/LineLength:
+  Exclude:
+    - spec/**/*
+
+Lint/UselessAccessModifier:
+  Enabled: false
+Lint/IneffectiveAccessModifier:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 40
+Metrics/BlockLength:
+  Max: 99
+  Exclude:
+    - spec/**/*
+Metric/CyclomaticComplexity:
+  Enabled: false
+Metrics/MethodLength:
+  Max: 90
+  CountComments: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
+Rails/NotNullColumn:
+  Enabled: false
+Rails/ReversibleMigration:
+  Enabled: false
+
+RSpec/EmptyExampleGroup:
+  Enabled: false
+RSpec/ExampleLength:
+  Enabled: false
+RSpec/LetSetup:
+  Enabled: false
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/NamedSubject:
+  Enabled: false
