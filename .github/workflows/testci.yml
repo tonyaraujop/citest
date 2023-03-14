@@ -1,0 +1,66 @@
+name: TestCI
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  rubocop:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.2
+          bundler-cache: true
+
+      - name: Rubocop linter
+        run: bundle exec rubocop
+
+  rspec:
+    runs-on: ubuntu-latest
+    services:
+      database:
+        image: postgres:12
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: sekret
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      RAILS_ENV: test
+      POSTGRES_USER: postgres
+      POSTGRES_PASS: sekret
+      POSTGRES_HOST: localhost
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.2
+          bundler-cache: true
+
+      - name: Install postgres client dependencies
+        run: |
+          sudo apt-get install libpq-dev
+          gem install bundler
+
+      - name: install dependecies
+        run: bundle install
+
+      - name: Create DB
+        run: |
+          cp config/database.example.yml config/database.yml
+          bundle exec rails db:create
+          bundle exec rails db:schema:load
+
+      - name: Run tests
+        run: bundle exec rspec
